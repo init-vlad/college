@@ -67,14 +67,22 @@ class ScheduleResource extends Resource
                 Tables\Columns\TextColumn::make('subject.name')
                     ->label('Предмет')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->weight('bold'),
                 Tables\Columns\TextColumn::make('teacher.name')
                     ->label('Преподаватель')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('classroom')
                     ->label('Аудитория')
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->color('gray'),
+                Tables\Columns\TextColumn::make('group.name')
+                    ->label('Группа')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('day_of_week')
@@ -94,16 +102,26 @@ class ScheduleResource extends Resource
                     ->preload(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label('Подробнее')
+                    ->modalHeading(fn ($record) => 'Занятие: ' . $record->subject->name)
+                    ->modalDescription(fn ($record) => $record->day_of_week . ', ' .
+                        $record->start_time->format('H:i') . ' - ' .
+                        $record->end_time->format('H:i'))
+                    ->modalContent(fn ($record) => view('filament.student.schedule.view-modal', compact('record')))
+                    ->modalWidth('2xl'),
             ])
             ->defaultSort('day_of_week')
-            ->defaultSort('start_time');
+            ->defaultSort('start_time')
+            ->striped()
+            ->recordUrl(null);
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListSchedules::route('/'),
+            'view' => Pages\ViewSchedule::route('/{record}'),
         ];
     }
 }
