@@ -16,7 +16,7 @@ Route::get('/about', [WebController::class, 'about'])->name('about');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-    
+
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
 });
@@ -24,22 +24,15 @@ Route::middleware('guest')->group(function () {
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    
+
     // Dashboard routes based on roles
-    Route::get('/admin/dashboard', function () {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Доступ запрещен');
-        }
-        return view('dashboards.admin');
-    })->name('admin.dashboard');
-    
     Route::get('/teacher/dashboard', function () {
         if (auth()->user()->role !== 'teacher') {
             abort(403, 'Доступ запрещен');
         }
         return view('dashboards.teacher');
     })->name('teacher.dashboard');
-    
+
     Route::get('/student/dashboard', function () {
         if (auth()->user()->role !== 'student') {
             abort(403, 'Доступ запрещен');

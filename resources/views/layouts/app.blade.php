@@ -58,13 +58,7 @@
                     <span style="color: hsl(var(--foreground)); font-size: 0.875rem;">
                         Привет, {{ Auth::user()->name }}!
                     </span>
-                    @if(Auth::user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; margin-right: var(--space-sm);">
-                            <button class="btn btn-outline">
-                                Админ панель
-                            </button>
-                        </a>
-                    @elseif(Auth::user()->role === 'teacher')
+                    @if(Auth::user()->role === 'teacher')
                         <a href="{{ route('teacher.dashboard') }}" style="text-decoration: none; margin-right: var(--space-sm);">
                             <button class="btn btn-outline">
                                 Кабинет преподавателя

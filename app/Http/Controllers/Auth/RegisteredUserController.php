@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
             // Redirect based on user role
             switch ($user->role) {
                 case 'admin':
-                    return redirect()->route('admin.dashboard')->with('success', 'Регистрация прошла успешно!');
+                    return redirect('/admin')->with('success', 'Регистрация прошла успешно!');
                 case 'teacher':
                     return redirect()->route('teacher.dashboard')->with('success', 'Регистрация прошла успешно!');
                 case 'student':
