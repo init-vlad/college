@@ -58,10 +58,11 @@ class RegisteredUserController extends Controller
                 case 'admin':
                     return redirect('/admin')->with('success', 'Регистрация прошла успешно!');
                 case 'teacher':
-                    return redirect()->route('teacher.dashboard')->with('success', 'Регистрация прошла успешно!');
+                    return redirect('/teacher')->with('success', 'Регистрация прошла успешно!');
                 case 'student':
+                    return redirect('/student')->with('success', 'Регистрация прошла успешно!');
                 default:
-                    return redirect()->route('student.dashboard')->with('success', 'Регистрация прошла успешно!');
+                    return redirect()->route('home')->with('success', 'Регистрация прошла успешно!');
             }
 
         } catch (\Exception $e) {

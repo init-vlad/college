@@ -42,13 +42,20 @@ class UserResource extends Resource
                     ->unique(ignoreRecord: true),
                 Forms\Components\Select::make('role')
                     ->label('Роль')
+                    ->required()
                     ->options([
                         'student' => 'Студент',
                         'teacher' => 'Преподаватель',
                         'admin' => 'Администратор',
                     ])
-                    ->required()
-                    ->default('student'),
+                    ->default('student')
+                    ->live(),
+                Forms\Components\Select::make('group_id')
+                    ->label('Группа')
+                    ->relationship('group', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->visible(fn (Forms\Get $get): bool => $get('role') === 'student'),
                 Forms\Components\TextInput::make('password')
                     ->label('Пароль')
                     ->password()
@@ -82,9 +89,9 @@ class UserResource extends Resource
                     ->label('Роль')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'admin' => 'success',
+                        'admin' => 'danger',
                         'teacher' => 'warning',
-                        'student' => 'primary',
+                        'student' => 'success',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -93,6 +100,11 @@ class UserResource extends Resource
                         'student' => 'Студент',
                         default => $state,
                     }),
+                Tables\Columns\TextColumn::make('group.name')
+                    ->label('Группа')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Создан')
                     ->dateTime('d.m.Y H:i')

@@ -24,19 +24,4 @@ Route::middleware('guest')->group(function () {
 // Authenticated routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-    // Dashboard routes based on roles
-    Route::get('/teacher/dashboard', function () {
-        if (auth()->user()->role !== 'teacher') {
-            abort(403, 'Доступ запрещен');
-        }
-        return view('dashboards.teacher');
-    })->name('teacher.dashboard');
-
-    Route::get('/student/dashboard', function () {
-        if (auth()->user()->role !== 'student') {
-            abort(403, 'Доступ запрещен');
-        }
-        return view('dashboards.student');
-    })->name('student.dashboard');
 });

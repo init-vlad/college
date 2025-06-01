@@ -59,13 +59,13 @@
                         Привет, {{ Auth::user()->name }}!
                     </span>
                     @if(Auth::user()->role === 'teacher')
-                        <a href="{{ route('teacher.dashboard') }}" style="text-decoration: none; margin-right: var(--space-sm);">
+                        <a href="/teacher" style="text-decoration: none; margin-right: var(--space-sm);">
                             <button class="btn btn-outline">
                                 Кабинет преподавателя
                             </button>
                         </a>
                     @elseif(Auth::user()->role === 'student')
-                        <a href="{{ route('student.dashboard') }}" style="text-decoration: none; margin-right: var(--space-sm);">
+                        <a href="/student" style="text-decoration: none; margin-right: var(--space-sm);">
                             <button class="btn btn-outline">
                                 Кабинет студента
                             </button>
