@@ -39,6 +39,8 @@ class TeacherPanelProvider extends PanelProvider
                     ->icon('heroicon-o-arrow-left')
                     ->openUrlInNewTab(false),
             ])
+            ->breadcrumbs(false)
+            ->sidebarCollapsibleOnDesktop()
             ->authGuard('web')
             ->authPasswordBroker('users')
             ->discoverResources(in: app_path('Filament/Teacher/Resources'), for: 'App\\Filament\\Teacher\\Resources')

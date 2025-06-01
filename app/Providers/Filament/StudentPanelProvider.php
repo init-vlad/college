@@ -39,6 +39,8 @@ class StudentPanelProvider extends PanelProvider
                     ->icon('heroicon-o-arrow-left')
                     ->openUrlInNewTab(false),
             ])
+            ->breadcrumbs(false)
+            ->sidebarCollapsibleOnDesktop()
             ->authGuard('web')
             ->authPasswordBroker('users')
             ->discoverResources(in: app_path('Filament/Student/Resources'), for: 'App\\Filament\\Student\\Resources')

@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Infolists;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -77,14 +78,17 @@ class GradeResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('comment')
                     ->label('Комментарий')
-                    ->limit(50)
+                    ->limit(80)
+                    ->wrap()
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
-                        if (strlen($state) <= 50) {
+                        if (empty($state) || strlen($state) <= 80) {
                             return null;
                         }
                         return $state;
-                    }),
+                    })
+                    ->placeholder('Нет комментария')
+                    ->searchable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('grade')
@@ -124,7 +128,39 @@ class GradeResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label('Просмотр')
+                    ->modalHeading('Детали оценки')
+                    ->infolist([
+                        Infolists\Components\Section::make('Информация об оценке')
+                            ->schema([
+                                Infolists\Components\TextEntry::make('subject.name')
+                                    ->label('Предмет'),
+                                Infolists\Components\TextEntry::make('grade')
+                                    ->label('Оценка')
+                                    ->badge()
+                                    ->color(fn (int $state): string => match ($state) {
+                                        5 => 'success',
+                                        4 => 'warning',
+                                        3 => 'info',
+                                        2 => 'danger',
+                                        default => 'gray',
+                                    }),
+                                Infolists\Components\TextEntry::make('grade_type')
+                                    ->label('Тип оценки')
+                                    ->formatStateUsing(fn (string $state): string => Grade::GRADE_TYPES[$state] ?? $state),
+                                Infolists\Components\TextEntry::make('teacher.name')
+                                    ->label('Преподаватель'),
+                                Infolists\Components\TextEntry::make('date')
+                                    ->label('Дата')
+                                    ->date('d.m.Y'),
+                                Infolists\Components\TextEntry::make('comment')
+                                    ->label('Комментарий преподавателя')
+                                    ->placeholder('Комментарий отсутствует')
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2)
+                    ]),
             ])
             ->defaultSort('date', 'desc');
     }
