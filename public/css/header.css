@@ -125,11 +125,11 @@ nav ul li a.active {
   header {
     padding: 0 var(--space-md);
   }
-  
+
   .burger-menu {
     display: flex;
   }
-  
+
   nav {
     position: fixed;
     top: 80px;
@@ -144,30 +144,30 @@ nav ul li a.active {
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   nav.show {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
   }
-  
+
   nav ul {
     flex-direction: column;
     gap: var(--space-md);
     align-items: stretch;
   }
-  
+
   nav ul li a {
     display: block;
     padding: var(--space-md);
     text-align: center;
   }
-  
+
   .logo {
     gap: var(--space-sm);
   }
-  
+
   .icb-span {
     font-size: 1.5rem;
   }
-} 
+}

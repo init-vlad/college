@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ICB - Международный колледж бизнеса и коммуникаций')</title>
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/root-styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main-page.css') }}">
-    
+
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/x-icon">
-    
+
     <!-- Custom page styles -->
     @stack('styles')
-    
+
     <!-- Scripts -->
     <script src="{{ asset('js/script.js') }}" defer></script>
     @stack('scripts')
@@ -26,15 +26,18 @@
     <header>
         <div class="logo">
             <img src="{{ asset('img/favicon.png') }}" alt="Логотип ICB">
-            <span class="icb-span">ICB</span>
+            <a href="{{ route('home') }}" style="text-decoration: none; color: inherit;">
+                <span class="icb-span">ICB</span>
+            </a>
         </div>
-        
+
         <nav>
             <ul>
-                <li><a href="{{ route('specialities') }}">Специальности</a></li>
-                <li><a href="{{ route('advantages') }}">Преимущества</a></li>
-                <li><a href="{{ route('grants') }}">Гранты и скидки</a></li>
-                <li><a href="{{ route('about') }}">О нас</a></li>
+                <li><a href="{{ route('home') }}" class="{{ Route::currentRouteName() == 'home' ? 'active' : '' }}">Главная</a></li>
+                <li><a href="{{ route('specialities') }}" class="{{ Route::currentRouteName() == 'specialities' ? 'active' : '' }}">Специальности</a></li>
+                <li><a href="{{ route('advantages') }}" class="{{ Route::currentRouteName() == 'advantages' ? 'active' : '' }}">Преимущества</a></li>
+                <li><a href="{{ route('grants') }}" class="{{ Route::currentRouteName() == 'grants' ? 'active' : '' }}">Гранты и скидки</a></li>
+                <li><a href="{{ route('about') }}" class="{{ Route::currentRouteName() == 'about' ? 'active' : '' }}">О нас</a></li>
             </ul>
         </nav>
 
@@ -112,7 +115,7 @@
                     <p><a href="https://drive.google.com/file/d/1e85rueH3PdjIRo8oKoOq1s1fa3FvvCid/view" target="_blank" style="text-decoration: none; color: inherit;">Международная аккредитация</a></p>
                     <p><a href="https://docs.google.com/document/d/1bOHj4AcE8lfShxc5VN8LgOzAVl8Lmp3uGFi-pr-Wty4/edit?tab=t.0" target="_blank" style="text-decoration: none; color: inherit;">Реквизиты</a></p>
                 </div>
-                
+
                 <div class="main5-column">
                     <p><strong>Адрес:</strong></p>
                     <p>г. Алматы, Микрорайон Жетысу-2, 16а</p>
@@ -152,4 +155,4 @@
     <script src="{{ asset('js/script_active.js') }}" defer></script>
     @stack('bottom-scripts')
 </body>
-</html> 
+</html>
