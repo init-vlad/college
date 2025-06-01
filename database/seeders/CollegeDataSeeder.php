@@ -48,12 +48,21 @@ class CollegeDataSeeder extends Seeder
             Group::create($group);
         }
 
-        // Создаем администратора
+        // Создаем тестового студента
         User::create([
-            'name' => 'Администратор',
-            'email' => 'admin@icb.kz',
+            'name' => 'Студент',
+            'email' => 'student@gmail.com',
             'password' => Hash::make('password'),
-            'role' => 'admin',
+            'role' => 'student',
+            'group_id' => 1,
+        ]);
+
+        // Создаем тестового преподавателя
+        User::create([
+            'name' => 'Преподаватель',
+            'email' => 'teacher@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'teacher',
         ]);
 
         // Создаем преподавателей
