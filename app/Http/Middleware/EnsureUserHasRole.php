@@ -24,14 +24,14 @@ class EnsureUserHasRole
             'request_path' => $request->path(),
             'user_agent' => $request->userAgent(),
             'ip_address' => $request->ip(),
-            'session_id' => $request->session()->getId(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
         ]);
 
         if (!Auth::check()) {
             Log::warning('User not authenticated', [
                 'required_role' => $role,
                 'request_url' => $request->url(),
-                'session_id' => $request->session()->getId(),
+                'session_id' => $request->hasSession() ? $request->session()->getId() : null,
                 'auth_guard' => Auth::getDefaultDriver(),
             ]);
             return redirect()->route('login');
@@ -48,7 +48,7 @@ class EnsureUserHasRole
             'user_name' => $user->name,
             'user_group_id' => $user->group_id ?? null,
             'request_url' => $request->url(),
-            'session_id' => $request->session()->getId(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
         ]);
 
         if ($user->role !== $role) {
@@ -66,7 +66,7 @@ class EnsureUserHasRole
                     'student' => '/student',
                     default => '/',
                 },
-                'session_id' => $request->session()->getId(),
+                'session_id' => $request->hasSession() ? $request->session()->getId() : null,
             ]);
 
             // Redirect based on user's actual role
@@ -84,7 +84,7 @@ class EnsureUserHasRole
             'user_role' => $user->role,
             'required_role' => $role,
             'request_url' => $request->url(),
-            'session_id' => $request->session()->getId(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
         ]);
 
         return $next($request);

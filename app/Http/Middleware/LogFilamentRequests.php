@@ -25,8 +25,8 @@ class LogFilamentRequests
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'referer' => $request->header('referer'),
-            'session_id' => $request?->session()?->getId(),
-            'csrf_token' => $request?->session()?->token(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
+            'csrf_token' => $request->hasSession() ? $request->session()->token() : null,
             'headers' => [
                 'x-forwarded-for' => $request->header('x-forwarded-for'),
                 'x-forwarded-proto' => $request->header('x-forwarded-proto'),
@@ -54,7 +54,7 @@ class LogFilamentRequests
             'status_code' => $response->getStatusCode(),
             'duration_ms' => round($duration, 2),
             'content_type' => $response->headers->get('content-type'),
-            'session_id' => $request->session()->getId(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
             'user_id' => Auth::check() ? Auth::id() : null,
             'response_headers' => [
                 'location' => $response->headers->get('location'),
@@ -70,7 +70,7 @@ class LogFilamentRequests
                 'status_code' => $response->getStatusCode(),
                 'user_id' => Auth::check() ? Auth::id() : null,
                 'user_role' => Auth::check() ? Auth::user()->role : null,
-                'session_data' => $request->session()->all(),
+                'session_data' => $request->hasSession() ? $request->session()->all() : null,
                 'response_content_preview' => substr($response->getContent(), 0, 500),
             ]);
         }

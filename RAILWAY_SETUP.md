@@ -61,6 +61,8 @@ SANCTUM_STATEFUL_DOMAINS=ваш-домен.railway.app
 2. **Настроен TrustProxies** - для корректной работы с Railway прокси
 3. **Обновлены CORS настройки** - добавлены пути для всех Filament панелей
 4. **Детальное логирование аутентификации** - в EnsureUserHasRole middleware
+5. **Исправлена ошибка "Session store not set on request"** - добавлены безопасные проверки сессии
+6. **Кастомная страница входа** - с подробным логированием процесса аутентификации
 
 ## Отладка
 
@@ -76,6 +78,10 @@ SANCTUM_STATEFUL_DOMAINS=ваш-домен.railway.app
 Ищите в логах записи:
 
 -   `Filament Request Started` - начало запроса
+-   `Login form email field hydrated` - загрузка формы входа
+-   `Filament login attempt started` - начало попытки входа
+-   `Filament login successful` - успешный вход
+-   `Filament login attempt failed` - неудачная попытка входа
 -   `EnsureUserHasRole middleware triggered` - проверка ролей
 -   `User authenticated` - успешная аутентификация
 -   `Role mismatch - Access denied` - проблемы с ролями
@@ -110,3 +116,20 @@ railway run php artisan cache:clear
 railway run php artisan route:clear
 railway run php artisan view:clear
 ```
+
+## Частые проблемы и решения
+
+### "Session store not set on request"
+
+-   **Причина**: Middleware пытается обратиться к сессии до её инициализации
+-   **Решение**: Добавлены проверки `$request->hasSession()` во всех middleware
+
+### Ошибки CSRF токена
+
+-   **Причина**: Неправильные настройки прокси или HTTPS
+-   **Решение**: Настройте `TRUST_PROXIES=*` и `SESSION_SECURE_COOKIE=true`
+
+### Редиректы с HTTPS на HTTP
+
+-   **Причина**: Laravel не определяет HTTPS соединение через прокси
+-   **Решение**: Добавлен ForceHttps middleware для принудительного HTTPS
