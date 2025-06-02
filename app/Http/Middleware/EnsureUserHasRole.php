@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasRole
@@ -16,13 +17,59 @@ class EnsureUserHasRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
+        // Логируем начало проверки
+        Log::info('EnsureUserHasRole middleware triggered', [
+            'required_role' => $role,
+            'request_url' => $request->url(),
+            'request_path' => $request->path(),
+            'user_agent' => $request->userAgent(),
+            'ip_address' => $request->ip(),
+            'session_id' => $request->session()->getId(),
+        ]);
+
         if (!Auth::check()) {
+            Log::warning('User not authenticated', [
+                'required_role' => $role,
+                'request_url' => $request->url(),
+                'session_id' => $request->session()->getId(),
+                'auth_guard' => Auth::getDefaultDriver(),
+            ]);
             return redirect()->route('login');
         }
 
-        if (Auth::user()->role !== $role) {
+        $user = Auth::user();
+        
+        // Детальное логирование пользователя
+        Log::info('User authenticated', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'user_role' => $user->role,
+            'required_role' => $role,
+            'user_name' => $user->name,
+            'user_group_id' => $user->group_id ?? null,
+            'request_url' => $request->url(),
+            'session_id' => $request->session()->getId(),
+        ]);
+
+        if ($user->role !== $role) {
+            $userRole = $user->role;
+            
+            Log::warning('Role mismatch - Access denied', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'user_role' => $userRole,
+                'required_role' => $role,
+                'request_url' => $request->url(),
+                'will_redirect_to' => match($userRole) {
+                    'admin' => '/admin',
+                    'teacher' => '/teacher',
+                    'student' => '/student',
+                    default => '/',
+                },
+                'session_id' => $request->session()->getId(),
+            ]);
+
             // Redirect based on user's actual role
-            $userRole = Auth::user()->role;
             return match($userRole) {
                 'admin' => redirect('/admin'),
                 'teacher' => redirect('/teacher'),
@@ -30,6 +77,15 @@ class EnsureUserHasRole
                 default => redirect('/')->with('error', 'Доступ запрещен.'),
             };
         }
+
+        Log::info('Role check passed - Access granted', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'user_role' => $user->role,
+            'required_role' => $role,
+            'request_url' => $request->url(),
+            'session_id' => $request->session()->getId(),
+        ]);
 
         return $next($request);
     }
