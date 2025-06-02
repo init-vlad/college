@@ -16,9 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         
         // Добавляем HTTPS redirect на production
-        $middleware->web(prepend: [
-            \App\Http\Middleware\ForceHttps::class,
-        ]);
+        // $middleware->web(prepend: [
+        //     \App\Http\Middleware\ForceHttps::class,
+        // ]);
         
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

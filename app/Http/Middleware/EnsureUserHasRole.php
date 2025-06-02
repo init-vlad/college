@@ -25,6 +25,8 @@ class EnsureUserHasRole
             'user_agent' => $request->userAgent(),
             'ip_address' => $request->ip(),
             'session_id' => $request->hasSession() ? $request->session()->getId() : null,
+            'app_env' => app()->environment(),
+            'auth_guard' => Auth::getDefaultDriver(),
         ]);
 
         if (!Auth::check()) {
@@ -33,6 +35,7 @@ class EnsureUserHasRole
                 'request_url' => $request->url(),
                 'session_id' => $request->hasSession() ? $request->session()->getId() : null,
                 'auth_guard' => Auth::getDefaultDriver(),
+                'app_env' => app()->environment(),
             ]);
             return redirect()->route('login');
         }
@@ -49,6 +52,7 @@ class EnsureUserHasRole
             'user_group_id' => $user->group_id ?? null,
             'request_url' => $request->url(),
             'session_id' => $request->hasSession() ? $request->session()->getId() : null,
+            'app_env' => app()->environment(),
         ]);
 
         if ($user->role !== $role) {
@@ -67,6 +71,7 @@ class EnsureUserHasRole
                     default => '/',
                 },
                 'session_id' => $request->hasSession() ? $request->session()->getId() : null,
+                'app_env' => app()->environment(),
             ]);
 
             // Redirect based on user's actual role
@@ -85,6 +90,7 @@ class EnsureUserHasRole
             'required_role' => $role,
             'request_url' => $request->url(),
             'session_id' => $request->hasSession() ? $request->session()->getId() : null,
+            'app_env' => app()->environment(),
         ]);
 
         return $next($request);

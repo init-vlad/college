@@ -65,7 +65,8 @@ class TeacherPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
-                Authenticate::class,
+                // Authenticate::class,
+                \App\Http\Middleware\DebugFilamentAuth::class,
                 \App\Http\Middleware\EnsureUserHasRole::class.':teacher',
             ]);
     }
