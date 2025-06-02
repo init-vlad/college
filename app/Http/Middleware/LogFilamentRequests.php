@@ -25,8 +25,8 @@ class LogFilamentRequests
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'referer' => $request->header('referer'),
-            'session_id' => $request->session()->getId(),
-            'csrf_token' => $request->session()->token(),
+            'session_id' => $request?->session()?->getId(),
+            'csrf_token' => $request?->session()?->token(),
             'headers' => [
                 'x-forwarded-for' => $request->header('x-forwarded-for'),
                 'x-forwarded-proto' => $request->header('x-forwarded-proto'),
